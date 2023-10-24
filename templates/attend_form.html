@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+    <html>
+        <meta charset="UTF-8">
+        <title>    
+            Student Attendance From
+        </title>
+
+        <body>
+            <form action="/submit_attend" method="post">
+                <label for="name">BU id</label>
+                <input type="text" name="student_id">
+                <input type="submit" value="submit">
+            </form>
+
+            {% if message %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endif %}
+
+        </body>
+    </html>

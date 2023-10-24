@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+    <html>
+        <meta charset="UTF-8">
+        <title>    
+            Add Student From
+        </title>
+
+        <body>
+            <form action="/add_student" method="post">
+                <label for="student_id">BU id</label>
+                <input type="text" name="student_id">
+
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name">
+
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name">
+
+                <input type="submit" value="submit">
+            </form>
+
+            {% if message %}
+                <script>
+                    alert("{{ message }}");
+                </script>
+            {% endif %}
+
+            <a href="{{ url_for('manage_dashboard') }}">Back to dashboard</a>
+        </body>
+    </html>
