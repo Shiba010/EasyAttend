@@ -1,26 +1,35 @@
 from flask import Flask, render_template, request, redirect, url_for
-import mysql.connector 
-from mysql.connector import Error
+import redis
 from datetime import date, datetime
 
 
 app = Flask(__name__)
 
-# MySql db connection
-def get_db_connection():
+#MongoDB connetion
+def get_StudentDB_connection():
+    
     try:
-        conn = mysql.connector.connect(
-            host="sql9.freemysqlhosting.net",
-            user="sql9656002",
-            password="uRstyZdM6A",
-            database="sql9656002"
-        )
-        if conn.is_connected():
-            return conn
-
-    except Error as e:
+        student_r = redis.Redis(
+                host='redis-16585.c62.us-east-1-4.ec2.cloud.redislabs.com',
+                port=16585,
+                password='tEjCkoJ9QGw3MvTmPMiCd6HEIHKg8dLI')
+        print("Successfully connected to StudentDB in Redis")
+        return student_r
+    except Exception as e:
+        print(e)
         return -1
 
+def get_AttendDB_connection():
+    try:
+        attend_r = redis.Redis(
+                host='redis-16446.c244.us-east-1-2.ec2.cloud.redislabs.com',
+                port=16446,
+                password='5AlW694HRmn3JtBFx5lLgQR29ODHZYc9')
+        print("Successfully connected to AttendDB in Redis")
+        return attend_r
+    except Exception as e:
+        print(e)
+        return -1
 
 def studentId_isValid(id):
     if id[0]=='U' and len(id[1:])==8 and id[1:].isdigit():
@@ -56,7 +65,7 @@ def add_student_form():
 def search_date_attend_form():
     return render_template('search_date_form.html')
 
-
+#Redis OK
 @app.route('/submit_attend', methods=['POST'])
 def attend():
     if request.method == 'POST':
@@ -64,39 +73,46 @@ def attend():
         if not studentId_isValid(student_id):
             return render_template('attend_form.html', message="Student ID is invalid.")
             
-        conn = get_db_connection()
-        if conn==-1:
-            return render_template('attend_form.html', message="DB connection error.")
-        else:
-            print("DB connect successfully.")
-           
-        cursor = conn.cursor()
+        student_r = get_StudentDB_connection()  
+        if student_r==-1:
+            return render_template('attend_form.html', message="StudentDB connection error.")
 
         # check if student exist in table "Student"
-        cursor.execute("SELECT * FROM Student WHERE Id = %s", (student_id,))
-        student = cursor.fetchone()
-
-        if student:
-            # insert attendace into Attend
-            today = date.today()
-            cursor.execute("SELECT * FROM Attend WHERE Student_id = %s And Attend_date = %s", (student_id, today))
-            attandence = cursor.fetchone()
-            if attandence:
-                conn.close()
-                return render_template('attend_form.html', message="Student already attended today.")
-
-            cursor.execute("INSERT INTO Attend (Student_id, Attend_date) VALUES (%s, %s)", (student_id, today))
-            conn.commit()
-            conn.close()
-            return render_template('attend_form.html', message="Add student attendance successfully.")
-
-        else:
-            conn.close()
+        if not student_r.exists(student_id):
             return render_template('attend_form.html', message="Student does not exist.")
-            
+        
+        attend_r = get_AttendDB_connection()
+        if attend_r==-1:
+            return render_template('attend_form.html', message="AttendDB connection error.")
+
+        today = str(date.today())
+        # check if today is not a class day
+        if not attend_r.sismember('AllDates', today):
+            return render_template('attend_form.html', message="Today is not a class day.")
+
+        # insert attendace into Attend
+        if attend_r.sadd(student_id, today):
+            return render_template('attend_form.html', message="Add student attendance successfully.")
+        else:
+            return render_template('attend_form.html', message="Add student attendance unsuccessfully.")
+
+
     return render_template('attend_form.html', message="Error request type.")
 
 
+#Redis OK
+# @app.route('/add_date', methods=['POST'])
+# def add_date():
+#     if request.method == 'POST':
+#         date = request.form.get('date')
+
+#         attend_r = get_AttendDB_connection()
+#         if attend_r==-1:
+#             return render_template('attend_form.html', message="AttendDB connection error.")
+
+
+#     return render_template('add_student.html', message="Error request type.")
+#Redis OK
 @app.route('/add_student', methods=['POST'])
 def add_student():
     if request.method == 'POST':
@@ -107,27 +123,20 @@ def add_student():
         if not studentId_isValid(student_id):
             return render_template('add_student.html', message="Student ID is invalid.")
             
-        conn = get_db_connection()
-        if conn==-1:
-            return render_template('add_student.html', message="DB connection error.")
-        else:
-            print("DB connect successfully.")
-           
-        cursor = conn.cursor()
+        student_r = get_StudentDB_connection()  
+        if student_r==-1:
+            return render_template('add_student.html', message="StudentDB connection error.")
 
         # check if student exist in table "Student"
-        cursor.execute("SELECT * FROM Student WHERE Id = %s", (student_id,))
-        student = cursor.fetchone()
-
-        if student:
-            conn.close()
+        if student_r.exists(student_id):
             return render_template('add_student.html', message="Student is already exist.")
-
+           
         else:
-            cursor.execute("INSERT INTO Student (Id, FirstName, LastName) VALUES (%s, %s, %s)", (student_id, first_name, last_name))
-            conn.commit()
-            conn.close()
-            return render_template('add_student.html', message="Add student successfully.")
+            student_info1 = {"FirstName": first_name,  "LastName": last_name, "Enable": 1}
+            if student_r.hmset(student_id, student_info1):       
+                return render_template('add_student.html', message="Add student successfully.")
+            else:
+                return render_template('add_student.html', message="Add student unsuccessfully.")
             
     return render_template('add_student.html', message="Error request type.")
 
