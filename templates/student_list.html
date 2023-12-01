@@ -23,10 +23,6 @@
               <i class="fas fa-solid fa-qrcode"></i>
               <span class="nav-item">QR code</span>
             </a></li>
-            <!-- <li><a href="#" data-target="attendance">
-              <i class="fas fa-chart-bar"></i>
-              <span class="nav-item">Attendance</span>
-            </a></li> -->
             <li><a href="#" class="logout">
               <i class="fas fa-sign-out-alt"></i>
               <span class="nav-item">Log out</span>
@@ -49,11 +45,10 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Student ID</th>
-                    <th>Student First Name</th>
-                    <th>Student Last Name</th>
+                    <th>BU ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Attendence</th>
-                    <!-- <th>Detail</th> -->
                   </tr>
                 </thead>  
                 <tbody>
@@ -63,7 +58,6 @@
                         <td>{{ student[1] }}</td>
                         <td>{{ student[2] }}</td>
                         <td>{{ student[3] }}</td>
-                        <!-- <td><button>Detail</button></td> -->
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -71,14 +65,8 @@
               <div class="back-link">
                 <a href="{{ url_for('manage_dashboard') }}">Back to dashboard</a>
               </div>
-              <!-- <div class="search-student">
-                <input type="text" id="studentSearch" placeholder="Search for a Student...">
-                <button id="searchBtn">Search</button>
-              </div> -->
             </div>
           </section>
-          
-    
           
         </section>
       </div>

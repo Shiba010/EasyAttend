@@ -52,6 +52,7 @@ def get_CourseDB_connection():
         print(e)
         return -1
 
+#Global variable of db connection
 attend_r = get_AttendDB_connection()
 student_r = get_StudentDB_connection()
 course_r = get_CourseDB_connection()
@@ -62,6 +63,7 @@ def close_redis_connection():
     student_r.close()
     course_r.close()
 
+#Close the db connections if the application stop
 atexit.register(close_redis_connection)
 
 # login OK
@@ -113,7 +115,7 @@ def logout():
     return render_template('sign_in.html', message='Log out successfully!')
 
 
-#OK function for add course
+#OK function for adding course
 def all_matching_weekdays_between(start_date, end_date):
     # Parsing the input dates to datetime objects
     start = datetime.strptime(start_date, "%Y-%m-%d")
@@ -148,12 +150,12 @@ def studentId_isValid(id):
         return False
 
 #OK
-def date_isValid(date_str):
-    try:
-        datetime.strptime(date_str, '%Y-%m-%d')
-        return True  
-    except ValueError:
-        return False  
+# def date_isValid(date_str):
+#     try:
+#         datetime.strptime(date_str, '%Y-%m-%d')
+#         return True  
+#     except ValueError:
+#         return False  
 
 #OK
 @app.route('/')
@@ -167,8 +169,7 @@ def update_students_from():
     if request.method == 'POST':
         course_section = request.form.get("course_section")
         return render_template('update_students_form.html', course_section = course_section)
-    return render_template('messege.html', message="Wrong request type.")
-
+    return redirect(url_for('manage_dashboard'))
 
 #OK
 @app.route('/update_students', methods=['POST'])
@@ -176,14 +177,14 @@ def update_students_from():
 def update_students():
     if request.method == 'POST':
         if 'student_info' not in request.files:
-            return render_template('managedash_board.html', message='No file part')
+            return render_template('update_students_form.html', message='No file part')
         file = request.files['student_info']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            return render_template('managedash_board.html', message='No selected file')
+            return render_template('update_students_form.html', message='No selected file')
         if not file.filename.lower().endswith('.csv'):
-            return render_template('managedash_board.html', message='File is not a CSV')
+            return render_template('update_students_form.html', message='File is not a CSV')
     
         course_name = request.form.get("course_section")
         
@@ -304,14 +305,14 @@ def add_course_form():
 def add_course():
     if request.method == 'POST':
         if 'student_info' not in request.files:
-            return render_template('managedash_board.html', message='No file part')
+            return render_template('add_course_form.html', message='No file part')
         file = request.files['student_info']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            return render_template('managedash_board.html', message='No selected file')
+            return render_template('add_course_form.html', message='No selected file')
         if not file.filename.lower().endswith('.csv'):
-            return render_template('managedash_board.html', message='File is not a CSV')
+            return render_template('add_course_form.html', message='File is not a CSV')
     
         course_name = request.form.get("course_section")
         days = request.form.get("days")
@@ -358,7 +359,7 @@ def attend():
         if not studentId_isValid(student_id):
             return render_template('attend_form.html', message="Student ID is invalid.")
             
-        # check if student exist in "Student db"
+        # check if student exists in "Student db"
         if not student_r.exists(student_id):
             return render_template('attend_form.html', message="Student does not exist.")
         
