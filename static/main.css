@@ -113,21 +113,33 @@
     align-items: center; /* 这将使其内容垂直居中 */
   }
 
- 
 
-  .class, .attendance, .student {
+  .class, .attendance, .student, .qr {
     margin-top: 20px;
     text-transform: capitalize;
     display: none;
   }
   
-  .class h1, .attendance h1, .student h1 {
+  .class h1, .attendance h1, .student h1, .qr h1{
     margin-left: 10px;
   }
 
   .class {
     display: block;
   }
+
+  .qr-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .qr-container img {
+    max-width: 100%;
+    height: auto;
+  }
+  
 
 
   .class-list, .student-list, .attendance-list{
@@ -230,4 +242,9 @@
   
 #searchBtn:hover {
   background-color: #34AF6D;
+}
+
+.back-link a{
+  color: #337ab7;
+  text-decoration: none;
 }

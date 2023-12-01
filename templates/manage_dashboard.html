@@ -25,7 +25,7 @@
             <span class="nav-item">Class</span>
           </a></li>
          
-        <li><a href="#" data-target="student">  <!-- qr code -->
+        <li><a href="#" data-target="qr">  <!-- qr code -->
           <i class="fas fa-solid fa-qrcode"></i>
           <span class="nav-item">QR code</span>
         </a></li>
@@ -105,14 +105,10 @@
         </div>
       </section>
 
-      <section class="student">
-        <div class="student-list">
-          <div class="header-container">
-            <div>
-              <h1>QR CODE</h1>
-              <img src="../static/image/QRcode2.png" width="500" height="625">
-            </div>
-          </div>
+      <section class="qr">
+        <div class="qr-container">
+          <h1>QR CODE</h1>
+          <img src="../static/image/QRcode2.png" width="500" height="625">
         </div>
       </section>
 
@@ -168,7 +164,7 @@
 <script>
     const nav = document.querySelector("nav ul");
     // const sections = document.querySelectorAll(".class, .attendance, .student");
-    const sections = document.querySelectorAll(".class, .student");
+    const sections = document.querySelectorAll(".class, .qr");
   
     nav.addEventListener("click", function(e) {
       if (e.target && e.target.nodeName === "A") {
