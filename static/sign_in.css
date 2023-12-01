@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+.container {
+    width: 100%; /* 这确保了容器的宽度充满了屏幕 */
+    height: 100vh; /* 这确保了容器的高度充满了屏幕 */
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.left-section {
+    flex: 1;
+}
+
+.right-section {
+    flex: 1;
+}
+
+/*左上角logo*/
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 80px;
+}
+
+/*左上角logo大小*/
+.logo img {
+    width: 50%;
+    height: auto;  
+}
+
+/*输入框整体*/
+.login-form {
+    flex: 1;
+    padding: 40px;
+    transform: scale(0.7);  /* 可以调整0.9这个值来调整缩放大小 */
+    transform-origin: center;
+}
+
+/*标题*/
+.login-form h2 {
+    font-size: 32   px; /* 文本大小 */
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 8px; /* 加了一点间距在标签和输入框之间 */
+}
+
+.login-form input {
+    width: 100%;
+    height: 40px; /* 增加了高度 */
+    padding: 10px;
+    font-size: 16px; /* 文本大小 */
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-form button {
+    width: 100%; 
+    height: 50px;
+    padding: 10px;
+    font-size: 18px; /* 文本大小 */
+    background-color: #a22b5a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-form a {
+    width: 100%; /* 调整宽度为80% */
+    font-size: 18px;
+    display: block;
+    margin-bottom: 10px;
+    text-align: right;
+    color: #a22b5a;
+    text-decoration: none;
+}
+
+
+.right-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

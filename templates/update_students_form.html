@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Student Form</title>
+        <link rel="stylesheet" href="../static/update_student.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Update Student Form</h2>
+            
+            <form action="/update_students" method="post" class="course-form" enctype="multipart/form-data">
+                <div class="input-group">
+                    <label for="course_section">Course Section</label>
+                    <input type="text" name="course_section" placeholder="Enter The Course Section" value="{{ course_section }}">
+                </div>
+
+                <div class="input-group">
+                    <label for="student_info">Upload All Student</label>
+                    <input type="file" name="student_info" id="student_info">
+                </div>
+
+                <div class="submit-group">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+
+
+            <div class="back-link">
+                <a href="{{ url_for('manage_dashboard') }}">Back to dashboard</a>
+            </div>
+        </div>
+        {% if message %}
+        <script>
+            alert("{{ message }}");
+        </script>
+        {% endif %}
+    </body>
+</html>

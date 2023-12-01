@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Add Student Form</title>
+        <link rel="stylesheet" href="../static/add_course.css">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Add New Course Form</h2>
+            <form action="/add_course" method="post" class="course-form" enctype="multipart/form-data">
+                
+                <div class="input-group">
+                    <label for="course_section">Course Section</label>
+                    <input type="text" name="course_section" placeholder="Enter The Course Section">
+                </div>
+
+                <div class="input-group">
+                    <label for="days">Days</label>
+                    <input type="text" name="days" placeholder="Enter The Course Day">
+                </div>
+                
+                <div class="input-group">
+                    <label for="time">Course Time</label>
+                    <input type="text" name="time" placeholder="Enter The Course Time">
+                </div>
+
+                <div class="input-group">
+                    <div class="date-container">
+                        <label for="start date">Start Date</label>
+                        <input type="date" name="start_date" placeholder="Select the start date" > 
+
+                        <label for="end date">End Date</label>
+                        <input type="date" name="end_date" placeholder="Select the end date">
+                    </div>
+                </div>
+
+                <!-- <div class="input-group">
+                    
+                </div> -->
+
+                <div class="input-group">
+                    <label for="student_info">Upload All Student</label>
+                    <input type="file" name="student_info" id="student_info">
+                </div>
+
+                <div class="submit-group">
+                    <input type="submit" value="Submit" class="submit-btn">
+                </div>
+            </form>
+            <div class="back-link">
+                <a href="{{ url_for('manage_dashboard') }}">Back to dashboard</a>
+            </div>
+        </div>
+        {% if message %}
+            <script>
+                alert("{{ message }}");
+            </script>
+        {% endif %}
+    </body>
+</html>

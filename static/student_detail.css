@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: rgb(226, 226, 226);
+  padding: 20px;
+}
+
+.header-container {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header-container h1 {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.student-list {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+
+
+.table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 15px;
+  min-width: 400px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.table th {
+  background: #34AF6D;
+  color: #fff;
+  text-align: center;
+  vertical-align: top;
+  padding: 12px 15px;
+  width: 200px;
+}
+
+.table td {
+  background: #f3f3f3;
+  text-align: center;
+  vertical-align: top;
+  padding: 12px 15px;
+  width: 200px;
+}
+
+.table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:last-of-type th {
+  border-bottom: 2px solid #34AF6D;
+}
+
+.table button {
+  padding: 6px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #34AF6D;
+  color: #34AF6D;
+}
+
+.table button:hover {
+  background: #34AF6D;
+  color: #fff;
+  transition: 0.5s;
+}
