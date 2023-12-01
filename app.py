@@ -366,7 +366,7 @@ def attend():
         today = str(date.today())
 
         if course_r.sismember(course_section+'_date', today):
-            if attend_r(student_id, today):
+            if attend_r.sismember(student_id, today):
                 return render_template('attend_form.html', message=f"{student_id} already signed-in today.")
             elif attend_r.sadd(student_id, today):
                 return render_template('attend_form.html', message=f"{student_id} sign-in successfully.")
