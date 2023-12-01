@@ -66,6 +66,7 @@
     font-size: 20px;
     text-align: center;
   }
+
   .nav-item{
     position: relative;
     top: 12px;
@@ -108,9 +109,11 @@
 
   .header-container {
     display: flex;
-    justify-content: space-between; /* 这将使左侧内容左对齐，而右侧内容右对齐 */
+    justify-content: space-between; /*这将使左侧内容左对齐，而右侧内容右对齐 */
     align-items: center; /* 这将使其内容垂直居中 */
   }
+
+ 
 
   .class, .attendance, .student {
     margin-top: 20px;
@@ -135,6 +138,8 @@
     border-radius: 10px;
     box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
   }
+
+
 
   /* Table */
   .table{

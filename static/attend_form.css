@@ -78,3 +78,11 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* 響應式布局 */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+}
