@@ -82,6 +82,39 @@ class User(UserMixin):
 users = {'admin@bu.edu': User('1', 'admin@bu.edu', 'admin')}
 
 
+#OK
+def studentId_isValid(id):
+    if id[0]=='U' and len(id[1:])==8 and id[1:].isdigit():
+        return True
+    else:
+        return False
+
+
+#OK function for adding course
+def all_matching_weekdays_between(start_date, end_date):
+    # Parsing the input dates to datetime objects
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    end = datetime.strptime(end_date, "%Y-%m-%d")
+    if end<start:
+        return -1
+
+    # Finding the weekday of the start date
+    weekday = start.weekday()
+
+    # Adjusting the start date to the next same weekday
+    if start.weekday() != weekday:
+        start += timedelta(days=(weekday - start.weekday() + 7) % 7)
+
+    # Finding all matching weekdays between the start and end dates
+    current = start
+    matching_days = []
+    while current <= end:
+        matching_days.append(current.strftime("%Y-%m-%d"))
+        current += timedelta(days=7)
+
+    return matching_days
+
+
 @login_manager.user_loader
 def load_user(user_id):
     for user in users.values():
@@ -115,42 +148,6 @@ def logout():
     return render_template('sign_in.html', message='Log out successfully!')
 
 
-#OK function for adding course
-def all_matching_weekdays_between(start_date, end_date):
-    # Parsing the input dates to datetime objects
-    start = datetime.strptime(start_date, "%Y-%m-%d")
-    end = datetime.strptime(end_date, "%Y-%m-%d")
-    if end<start:
-        return -1
-
-    # Finding the weekday of the start date
-    weekday = start.weekday()
-
-    # Adjusting the start date to the next same weekday
-    if start.weekday() != weekday:
-        start += timedelta(days=(weekday - start.weekday() + 7) % 7)
-
-    # Finding all matching weekdays between the start and end dates
-    current = start
-    matching_days = []
-    while current <= end:
-        matching_days.append(current.strftime("%Y-%m-%d"))
-        current += timedelta(days=7)
-
-    return matching_days
-
-
-
-
-#OK
-def studentId_isValid(id):
-    if id[0]=='U' and len(id[1:])==8 and id[1:].isdigit():
-        return True
-    else:
-        return False
-
-
-
 #OK
 @app.route('/')
 def attend_form():
@@ -164,6 +161,7 @@ def update_students_from():
         course_section = request.form.get("course_section")
         return render_template('update_students_form.html', course_section = course_section)
     return redirect(url_for('manage_dashboard'))
+
 
 #OK
 @app.route('/update_students', methods=['POST'])
@@ -183,8 +181,13 @@ def update_students():
         course_name = request.form.get("course_section")
         
         df = pd.read_csv(file)
+        for i in range(df.shape[0]):
+            if not studentId_isValid(df.iloc[i]['Student Id']):
+                return render_template('update_students_form.html', message=f"Fail to update students in {course_name}! Detect invalid student id.")
+
         course_r.hset(course_name, "Student Count", df.shape[0])
 
+        # all the student in the csv file
         update_student = {}
         for i in range(df.shape[0]):
             update_student[df.iloc[i]['Student Id']] = {'FirstName': df.iloc[i]['First Name'], 
@@ -198,10 +201,19 @@ def update_students():
             if data_type == 'hash':
                 info = student_r.hgetall(BuId) 
                 old_student.add(BuId)      
-                #student not in this class or already dropped   
-                if info[b'Enable']==b'0' or info[b'Course_Section']!=course_name.encode() or BuId in update_student:
-                    continue    
+
+                #student in this class dropped before but return to this class again
+                if info[b'Enable']==b'0' and info[b'Course_Section']==course_name.encode() and BuId in update_student:  
+                    student_r.hset(BuId, 'Enable', '1')
+                    continue
+
+                #student in other class or Student in this csv
+                if info[b'Course_Section']!=course_name.encode() or BuId in update_student:
+                    continue  
+
+                #disable the student in this class but drop this time
                 student_r.hset(BuId, 'Enable', '0')
+
         #add new student to DB        
         for BuId in update_student:
             if BuId in old_student:
@@ -212,15 +224,7 @@ def update_students():
     return render_template('update_students_form.html', message='Error request type')
 
 
-# @app.route('/get_course_section', methods=['GET'])
-# @login_required
-# def get_course_section():
-#     course_section = {}
-#     index = 0
-#     for key in course_r.scan_iter("*"):
-#         course_section[index] = key.decode('utf-8')
 
-#     return jsonify(course_section)
 
 #Ok
 @app.route('/manage_dashboard')
@@ -334,6 +338,13 @@ def add_course():
             
         #add course info to Course db
         df = pd.read_csv(file)
+
+        #if some student id is invalid in csv file, then stop
+        for i in range(df.shape[0]):
+            if not studentId_isValid(df.iloc[i]['Student Id']):
+                return render_template('add_course_form.html', message=f"Fail to create {course_name}! Detect invalid student ids.")
+
+    
         course_r.hset(course_name, "Days", days)
         course_r.hset(course_name, "Times", time)
         course_r.hset(course_name, "Student Count", df.shape[0])
@@ -381,6 +392,16 @@ def attend():
             return render_template('attend_form.html', message="Not a class day.")
 
     return render_template('attend_form.html', message="Wrong request type.")
+
+# @app.route('/get_course_section', methods=['GET'])
+# @login_required
+# def get_course_section():
+#     course_section = {}
+#     index = 0
+#     for key in course_r.scan_iter("*"):
+#         course_section[index] = key.decode('utf-8')
+
+#     return jsonify(course_section)
 
 
 if __name__ == '__main__':
