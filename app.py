@@ -242,6 +242,8 @@ def manage_dashboard():
         if data_type == 'hash':
             value = course_r.hgetall(key)
             for k,v in value.items():
+                if key == 'Start_time' or key == 'End_time':
+                    continue
                 course.append(v.decode('utf-8'))
             course_info.append(course)
 
@@ -352,6 +354,8 @@ def add_course():
     
         course_r.hset(course_name, "Days", days)
         course_r.hset(course_name, "Times", time)
+        course_r.hset(course_name, "Start_time", start_time)
+        course_r.hset(course_name, "End_time", end_time)
         course_r.hset(course_name, "Student Count", df.shape[0])
         course_r.hset(course_name, "total_course", len(all_dates))
 
@@ -386,7 +390,21 @@ def attend():
         course_section = student_r.hget(student_id, 'Course_Section').decode() # b'CS633-E1' => 'CS633-E1'
         today = str(date.today())
 
+        start_time = student_r.hget(course_section, 'Start_time').decode()
+        end_time = student_r.hget(course_section, 'End_time').decode()
+        start_time = datetime.strptime(start_time, "%H:%M").time()
+        end_time = datetime.strptime(end_time, "%H:%M").time()
+
+        # Record the current time
+        current_time = datetime.now()
+        
+        # Check if the current time is within the range
+        is_within_range = start_time <= current_time.time() <= end_time
+
         if course_r.sismember(course_section+'_date', today):
+            if not is_within_range:
+                return render_template('attend_form.html', message=f"Not in the class time.")
+
             if attend_r.sismember(student_id, today):
                 return render_template('attend_form.html', message=f"{student_id} already signed-in today.")
             elif attend_r.sadd(student_id, today):
