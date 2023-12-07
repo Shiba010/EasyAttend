@@ -403,7 +403,8 @@ def attend():
 
         if course_r.sismember(course_section+'_date', today):
             if not is_within_range:
-                return render_template('attend_form.html', message=f"Not in the class time.")
+                # return render_template('attend_form.html', message=f"Not in the class time.")
+                return render_template('attend_form.html', message=f"{start_time} {current_time.time()} {end_time}")
 
             if attend_r.sismember(student_id, today):
                 return render_template('attend_form.html', message=f"{student_id} already signed-in today.")
