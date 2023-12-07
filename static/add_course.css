@@ -63,6 +63,14 @@ input[list="days"]{
     border-radius: 5px;
 }
 
+input[type="time"]{
+    width: 70%;
+    padding: 2%;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 5px;
+}
+
 input[type="file"] {
     width: 70%;
     padding: 2%;

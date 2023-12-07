@@ -327,7 +327,9 @@ def add_course():
     
         course_name = request.form.get("course_section")
         days = request.form.get("days")
-        time = request.form.get("time")
+        start_time = request.form.get("start_time")
+        end_time = request.form.get("end_time")
+        time = f"{start_time} - {end_time}"
         start_date= request.form.get("start_date")
         end_date= request.form.get("end_date")
         courses = request.form.get("courses")
