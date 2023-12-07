@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 import pandas as pd
 import atexit
 from wtforms import StringField, PasswordField, SubmitField
+import pytz
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
@@ -396,15 +397,15 @@ def attend():
         end_time = datetime.strptime(end_time, "%H:%M").time()
 
         # Record the current time
-        current_time = datetime.now()
+        eastern = pytz.timezone('America/New_York')
+        current_time = datetime.now(eastern)
         
         # Check if the current time is within the range
         is_within_range = start_time <= current_time.time() <= end_time
 
         if course_r.sismember(course_section+'_date', today):
             if not is_within_range:
-                # return render_template('attend_form.html', message=f"Not in the class time.")
-                return render_template('attend_form.html', message=f"{start_time} {current_time.time()} {end_time}")
+                return render_template('attend_form.html', message=f"Not in the class time.")
 
             if attend_r.sismember(student_id, today):
                 return render_template('attend_form.html', message=f"{student_id} already signed-in today.")
