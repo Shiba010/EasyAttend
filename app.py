@@ -243,7 +243,7 @@ def manage_dashboard():
         if data_type == 'hash':
             value = course_r.hgetall(key)
             for k,v in value.items():
-                if key == 'Start_time' or key == 'End_time':
+                if k.decode('utf-8') == 'Start_time' or k.decode('utf-8') == 'End_time':
                     continue
                 course.append(v.decode('utf-8'))
             course_info.append(course)
