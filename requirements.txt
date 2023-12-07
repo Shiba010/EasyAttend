@@ -23,4 +23,3 @@ typing-extensions==4.8.0
 werkzeug==3.0.1
 wtforms==3.1.1
 zipp==3.17.0
-pytz==2021.1
