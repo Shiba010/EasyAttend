@@ -390,8 +390,8 @@ def attend():
         course_section = student_r.hget(student_id, 'Course_Section').decode() # b'CS633-E1' => 'CS633-E1'
         today = str(date.today())
 
-        start_time = student_r.hget(course_section, 'Start_time').decode()
-        end_time = student_r.hget(course_section, 'End_time').decode()
+        start_time = course_r.hget(course_section, 'Start_time').decode()
+        end_time = course_r.hget(course_section, 'End_time').decode()
         start_time = datetime.strptime(start_time, "%H:%M").time()
         end_time = datetime.strptime(end_time, "%H:%M").time()
 
