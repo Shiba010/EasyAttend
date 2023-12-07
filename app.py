@@ -91,15 +91,18 @@ def studentId_isValid(id):
 
 
 #OK function for adding course
-def all_matching_weekdays_between(start_date, end_date):
+def all_matching_weekdays_between(days, start_date, end_date):
     # Parsing the input dates to datetime objects
     start = datetime.strptime(start_date, "%Y-%m-%d")
     end = datetime.strptime(end_date, "%Y-%m-%d")
     if end<start:
         return -1
 
+    day_to_ix = {'MON':0, 'TUE':1, 'WED':2, 'THU': 3, 'FRI': 4, 'SAT': 5, 'SUN':6}   
+    weekday =  day_to_ix[days]
+
     # Finding the weekday of the start date
-    weekday = start.weekday()
+    # weekday = start.weekday()
 
     # Adjusting the start date to the next same weekday
     if start.weekday() != weekday:
@@ -329,7 +332,7 @@ def add_course():
         end_date= request.form.get("end_date")
         courses = request.form.get("courses")
 
-        all_dates = all_matching_weekdays_between(start_date, end_date) #list
+        all_dates = all_matching_weekdays_between(days, start_date, end_date) #list
         if all_dates == -1:
             return render_template('add_course_form.html', message=f"Error! End date is earlier than start date!")
         
