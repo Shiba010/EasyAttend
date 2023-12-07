@@ -55,6 +55,14 @@ input[type="date"] {
     border-radius: 5px;
 }
 
+input[list="days"]{
+    width: 70%;
+    padding: 2%;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 5px;
+}
+
 input[type="file"] {
     width: 70%;
     padding: 2%;

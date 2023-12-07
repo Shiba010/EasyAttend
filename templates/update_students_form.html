@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Add Student Form</title>
+        <title>Update Student Form</title>
         <link rel="stylesheet" href="../static/update_student.css">
     </head>
     <body>
@@ -36,4 +36,17 @@
         </script>
         {% endif %}
     </body>
+    <!-- <script>
+        fetch('/get_course_section')
+            .then(response => response.json())
+            .then(data => {
+                let course_section_Datalist = document.getElementById("course_section");
+                for (const key in data){
+                    let option = document.createElement('option');
+                    // Set the value of the option
+                    option.value = data[key];
+                    course_section_Datalist.appendChild(option);
+                }
+            });
+    </script> -->
 </html>

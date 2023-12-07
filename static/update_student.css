@@ -48,6 +48,15 @@ input[type="text"] {
     font-size: 15px;
 }
 
+/* input[list="course_section"] {
+    width: 70%; 
+    padding: 2%;
+    border: 1px solid #ddd;
+    background: #f3f3f3;
+    border-radius: 5px;
+    font-size: 15px;
+} */
+
 input[type="file"] {
     width: 70%;
     padding: 2%;

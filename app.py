@@ -149,13 +149,7 @@ def studentId_isValid(id):
     else:
         return False
 
-#OK
-# def date_isValid(date_str):
-#     try:
-#         datetime.strptime(date_str, '%Y-%m-%d')
-#         return True  
-#     except ValueError:
-#         return False  
+
 
 #OK
 @app.route('/')
@@ -217,6 +211,16 @@ def update_students():
         return render_template('update_students_form.html', message=f'Update students in {course_name} successfully')
     return render_template('update_students_form.html', message='Error request type')
 
+
+# @app.route('/get_course_section', methods=['GET'])
+# @login_required
+# def get_course_section():
+#     course_section = {}
+#     index = 0
+#     for key in course_r.scan_iter("*"):
+#         course_section[index] = key.decode('utf-8')
+
+#     return jsonify(course_section)
 
 #Ok
 @app.route('/manage_dashboard')

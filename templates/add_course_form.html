@@ -12,32 +12,33 @@
                 
                 <div class="input-group">
                     <label for="course_section">Course Section</label>
-                    <input type="text" name="course_section" placeholder="Enter The Course Section">
+                    <input type="text" name="course_section" placeholder="Enter The Course Section" required>
                 </div>
 
                 <div class="input-group">
                     <label for="days">Days</label>
-                    <input type="text" name="days" placeholder="Enter The Course Day">
+                    <input list="days" name="days" placeholder="Select The Course Day" required>
+                    <datalist id="days"></datalist>
                 </div>
                 
                 <div class="input-group">
                     <label for="time">Course Time</label>
-                    <input type="text" name="time" placeholder="Enter The Course Time">
+                    <input type="text" name="time" placeholder="Enter The Course Time" required>
                 </div>
 
                 <div class="input-group">
-                        <label for="start_date">Start Date</label>
-                        <input type="date" name="start_date" placeholder="Select the start date" > 
+                    <label for="start_date">Start Date</label>
+                    <input type="date" name="start_date" placeholder="Select the start date" required> 
                 </div>
 
                 <div class="input-group">
-                        <label for="end_date">End Date</label>
-                        <input type="date" name="end_date" placeholder="Select the end date">
+                    <label for="end_date">End Date</label>
+                    <input type="date" name="end_date" placeholder="Select the end date" required>
                 </div>
 
                 <div class="input-group">
                     <label for="student_info">Upload All Student</label>
-                    <input type="file" name="student_info" id="student_info">
+                    <input type="file" name="student_info" id="student_info" required>
                 </div>
 
                 <div class="submit-group">
@@ -54,4 +55,18 @@
             </script>
         {% endif %}
     </body>
+    <script>
+        const daysDatalist = document.getElementById('days');
+        const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
+        // Loop through the days array
+        for (let day of days) {
+            // Create a new option element
+            const option = document.createElement('option');
+            // Set the value of the option
+            option.value = day;
+            // Append the option to the datalist
+            daysDatalist.appendChild(option);
+}
+    </script>
 </html>
