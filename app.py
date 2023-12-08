@@ -210,7 +210,7 @@ def update_students():
             data_type = student_r.type(BuId).decode('utf-8')
             if data_type == 'hash':
                 info = student_r.hgetall(BuId) 
-                old_student.add(BuId)      
+                old_student.add(BuId.decode())      
 
                 #student in this class dropped before but return to this class again
                 if info[b'Enable']==b'0' and info[b'Course_Section']==course_name.encode() and BuId in update_student:  
