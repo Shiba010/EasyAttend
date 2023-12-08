@@ -192,8 +192,8 @@ def update_students():
         course_r.hset(course_name, "Student Count", df.shape[0])
 
         course_dates = course_r.smembers(f"{course_name}_date")
-        course_dates = [datetime.strptime(d.decode(), '%Y-%m-%d') for d in list(course_dates)]
-        today = datetime.now()
+        course_dates = [datetime.strptime(d.decode(), '%Y-%m-%d').date() for d in list(course_dates)]
+        today = datetime.today().date()
         count_after_today = sum(d >= today for d in course_dates)
 
         # all the student in the csv file
