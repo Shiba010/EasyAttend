@@ -302,7 +302,9 @@ def student_list():
                     continue
                 attend_count = len(attend_r.smembers(BuId))
                 course_count = course_r.hget(course_section.encode(), "total_course").decode('utf-8')
-                attendence = f'{attend_count}/{info[b"Total_course"].decode("utf-8")}'
+                total_course = int(info[b"Total_course"].decode("utf-8"))
+                attend_rate = round(attend_count/total_course*100, 2)
+                attendence = f'{attend_rate}% ({attend_count}/{total_course})'
 
                 arr = [BuId.decode('utf-8'), info[b'FirstName'].decode('utf-8'), info[b'LastName'].decode('utf-8'), attendence]
         
