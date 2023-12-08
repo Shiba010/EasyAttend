@@ -191,13 +191,19 @@ def update_students():
 
         course_r.hset(course_name, "Student Count", df.shape[0])
 
+        course_dates = course_r.smembers(f"{course_name}_date")
+        course_dates = [datetime.strptime(d.decode(), '%Y-%m-%d') for d in list(course_dates)]
+        today = datetime.now()
+        count_after_today = sum(d >= today for d in course_dates)
+
         # all the student in the csv file
         update_student = {}
         for i in range(df.shape[0]):
             update_student[df.iloc[i]['Student Id']] = {'FirstName': df.iloc[i]['First Name'], 
                                                         'LastName': df.iloc[i]['Last Name'],
                                                         'Enable': '1',
-                                                        'Course_Section': course_name}
+                                                        'Course_Section': course_name,
+                                                        'Total_course': count_after_today}
         selected_student = []
         old_student = set()
         for BuId in student_r.scan_iter("*"):
@@ -296,7 +302,7 @@ def student_list():
                     continue
                 attend_count = len(attend_r.smembers(BuId))
                 course_count = course_r.hget(course_section.encode(), "total_course").decode('utf-8')
-                attendence = f'{attend_count}/{course_count}'
+                attendence = f'{attend_count}/{info[b"Total_course"].decode("utf-8")}'
 
                 arr = [BuId.decode('utf-8'), info[b'FirstName'].decode('utf-8'), info[b'LastName'].decode('utf-8'), attendence]
         
@@ -366,7 +372,9 @@ def add_course():
             update_student[df.iloc[i]['Student Id']] = {'FirstName': df.iloc[i]['First Name'], 
                                                         'LastName': df.iloc[i]['Last Name'],
                                                         'Enable': '1',
-                                                        'Course_Section': course_name} 
+                                                        'Course_Section': course_name,
+                                                        'Total_course': len(all_dates)}
+                                                        
         for BuId in update_student:
             student_r.hmset(BuId, update_student[BuId]) 
 
