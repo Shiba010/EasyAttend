@@ -218,7 +218,7 @@ def update_students():
                     continue
 
                 #student in other class or Student in this csv
-                if info[b'Course_Section']!=course_name.encode() or BuId in update_student:
+                if info[b'Course_Section']!=course_name.encode() or BuId.decode() in update_student:
                     continue  
 
                 #disable the student in this class but drop this time
